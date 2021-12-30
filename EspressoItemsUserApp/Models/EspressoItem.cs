@@ -8,9 +8,9 @@ namespace EspressoItemsUserApp.Models
 {
     internal class EspressoItem
     {
-        public long Id { get; set; }
-        public int Rating { get; set; }
-        public string Name { get; set; }
-        public string Roaster { get; set; }
+        public long id { get; set; }
+        public int rating { get; set; }
+        public string name { get; set; }
+        public string roaster { get; set; }
     }
 }
