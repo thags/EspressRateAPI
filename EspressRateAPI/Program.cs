@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using EspressRateAPI.Models;
+using System.Configuration;
+using System.Diagnostics;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,9 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<EspressoContext>(opt =>
-        opt.UseInMemoryDatabase("EspressoRateList"));
-
-
+        opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Initial Catalog=EspressoRate; Integrated Security=true;")
+        );
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
