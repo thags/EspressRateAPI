@@ -8,10 +8,8 @@ namespace EspressoItemsUserApp
     {
         static void Main(string[] args)
         {
-            TableVisualisationEngine displayTable = new TableVisualisationEngine();
-            APIController apiFetch = new APIController();
-            List<EspressoItem> espressos = apiFetch.GetItemsAsync().Result;
-            displayTable.ViewTable(espressos);
+            UserInputController userInput = new UserInputController();
+            userInput.GetUserInput();
         }
     }
 }

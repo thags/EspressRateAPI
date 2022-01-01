@@ -20,17 +20,17 @@ namespace EspressoItemsUserApp
         private readonly HttpClient client = new HttpClient();
         private readonly string APIURL =ConfigurationManager.AppSettings.Get("APIBaseURL");
 
-        public async Task<List<EspressoItem>> GetItemsAsync()
+        public List<EspressoItem> GetItems()
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
             string ApiUrl = APIURL + "EspressoItems";
-            var streamTask = await client.GetStreamAsync(new Uri(ApiUrl));
+            var streamTask = client.GetStreamAsync(new Uri(ApiUrl)).Result;
             
             var options = new JsonSerializerOptions();
             options.Converters.Add(new JsonStringEnumConverter());
-            var categorieList = await JsonSerializer.DeserializeAsync<List<EspressoItem>>(streamTask, options);
+            List<EspressoItem> categorieList = JsonSerializer.DeserializeAsync<List<EspressoItem>>(streamTask, options).Result;
             return categorieList;
 
         }

@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EspressoItemsUserApp.Models;
 
 namespace EspressoItemsUserApp
 {
     internal class UserInputController
     {
-        public static void GetUserInput()
+        private protected TableVisualisationEngine displayTable = new TableVisualisationEngine();
+        private protected APIController apiFetch = new APIController();
+        public void GetUserInput()
         {
             bool exitProgram = false;
             while (!exitProgram)
             {
                 Console.WriteLine("\n --------------------------");
                 Console.WriteLine("0 to exit");
-                Console.WriteLine("V to view all");
+                Console.WriteLine("V to view");
                 Console.WriteLine("A to add");
                 Console.WriteLine("D to delete");
                 Console.WriteLine("E to edit");
@@ -27,16 +30,17 @@ namespace EspressoItemsUserApp
                     case "0":
                         exitProgram = true;
                         break;
-                    case "S":
+                    case "V":
+                        Console.Clear();
+                        ViewAll();
+                        break;
+                    case "A":
                         Console.Clear();
                         break;
-                    case "F":
+                    case "D":
                         Console.Clear();
                         break;
-                    case "R":
-                        Console.Clear();
-                        break;
-                    case "L":
+                    case "E":
                         Console.Clear();
                         break;
                     default:
@@ -46,8 +50,13 @@ namespace EspressoItemsUserApp
                 }
             }
         }
-        private static string GetUserMenuChoice() => Console.ReadLine().ToUpper();
-        private static void WaitForUser()
+        private void ViewAll()
+        {
+            List<EspressoItem> espressos = apiFetch.GetItems();
+            displayTable.ViewTable(espressos);
+        }
+        private string GetUserMenuChoice() => Console.ReadLine().ToUpper();
+        private void WaitForUser()
         {
             Console.WriteLine("Press any key to continue");
             Console.ReadLine();
