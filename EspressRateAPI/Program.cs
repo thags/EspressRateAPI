@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using EspressRateAPI.Models;
-using System.Configuration;
-using System.Diagnostics;
 
 
 var builder = WebApplication.CreateBuilder(args);
