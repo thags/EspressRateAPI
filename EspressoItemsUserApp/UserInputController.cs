@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EspressoItemsUserApp.Models;
+using EspressoItemsUserApp.Models.DTO;
 
 namespace EspressoItemsUserApp
 {
@@ -59,7 +60,8 @@ namespace EspressoItemsUserApp
         private void ViewAll()
         {
             List<EspressoItem> espressos = api.GetItems();
-            displayTable.ViewTable(espressos);
+            List<EspressoToView> viewItems = displayTable.ParseToView(espressos);
+            displayTable.ViewTable(viewItems);
         }
         private string GetUserMenuChoice() => Console.ReadLine().ToUpper();
         private void WaitForUser()
