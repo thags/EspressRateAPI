@@ -10,7 +10,7 @@ namespace EspressoItemsUserApp
     internal class UserInputController
     {
         private protected TableVisualisationEngine displayTable = new TableVisualisationEngine();
-        private protected APIController apiFetch = new APIController();
+        private protected APIController api = new APIController();
         public void GetUserInput()
         {
             bool exitProgram = false;
@@ -36,6 +36,7 @@ namespace EspressoItemsUserApp
                         break;
                     case "A":
                         Console.Clear();
+                        Add();
                         break;
                     case "D":
                         Console.Clear();
@@ -50,9 +51,14 @@ namespace EspressoItemsUserApp
                 }
             }
         }
+        private void Add()
+        {
+            EspressoItem newItem = CreateEspressoItem();
+            api.AddItem(newItem);
+        }
         private void ViewAll()
         {
-            List<EspressoItem> espressos = apiFetch.GetItems();
+            List<EspressoItem> espressos = api.GetItems();
             displayTable.ViewTable(espressos);
         }
         private string GetUserMenuChoice() => Console.ReadLine().ToUpper();
@@ -61,6 +67,32 @@ namespace EspressoItemsUserApp
             Console.WriteLine("Press any key to continue");
             Console.ReadLine();
             Console.Clear();
+        }
+        private EspressoItem CreateEspressoItem()
+        {
+            var item = new EspressoItem();
+            Console.WriteLine("Input Espresso Name");
+            item.Name = GetUserInputString();
+            Console.WriteLine("Input Espresso Roaster");
+            item.Roaster = GetUserInputString();
+            item.Rating = GetUserRating();
+
+            return item;
+        }
+        private string GetUserInputString()
+        {
+            return Console.ReadLine();
+        }
+        private int GetUserRating()
+        {
+            int rating;
+            bool goodInput;
+            do
+            {
+                Console.WriteLine("Input a rating 1-10");
+                goodInput = int.TryParse(GetUserInputString(), out rating);
+            } while (!goodInput);
+            return rating;
         }
     }
 }
