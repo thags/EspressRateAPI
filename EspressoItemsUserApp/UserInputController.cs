@@ -41,6 +41,8 @@ namespace EspressoItemsUserApp
                         break;
                     case "D":
                         Console.Clear();
+                        List<EspressoToView> espressoView = ViewAll();
+                        Delete(espressoView);
                         break;
                     case "E":
                         Console.Clear();
@@ -52,16 +54,28 @@ namespace EspressoItemsUserApp
                 }
             }
         }
+        private void Delete(List<EspressoToView> espressoViewed)
+        {
+            List<EspressoItem> espressos = api.GetItems();
+            //TODO
+            //Get user input for the ID of the item they want to delete
+            int userChoice = GetUserRating();
+            //Check that the ID they entered is actually an ID of an item viewed
+            //Get the index of the item they chose (it will always be the number they entered minus 1
+            //Send a call to the API to delete the API 
+            api.DeleteItem(userChoice);
+        }
         private void Add()
         {
             EspressoItem newItem = CreateEspressoItem();
             api.AddItem(newItem);
         }
-        private void ViewAll()
+        private List<EspressoToView> ViewAll()
         {
             List<EspressoItem> espressos = api.GetItems();
             List<EspressoToView> viewItems = displayTable.ParseToView(espressos);
             displayTable.ViewTable(viewItems);
+            return viewItems;
         }
         private string GetUserMenuChoice() => Console.ReadLine().ToUpper();
         private void WaitForUser()
@@ -89,11 +103,20 @@ namespace EspressoItemsUserApp
         {
             int rating;
             bool goodInput;
+            bool inRange;
             do
             {
                 Console.WriteLine("Input a rating 1-10");
                 goodInput = int.TryParse(GetUserInputString(), out rating);
-            } while (!goodInput);
+                if (rating > 0 && rating <= 10)
+                {
+                    inRange = true;
+                }
+                else
+                {
+                    inRange = false;
+                }
+            } while (!goodInput && !inRange);
             return rating;
         }
     }
