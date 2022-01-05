@@ -59,11 +59,36 @@ namespace EspressoItemsUserApp
             List<EspressoItem> espressos = api.GetItems();
             //TODO
             //Get user input for the ID of the item they want to delete
-            int userChoice = GetUserRating();
+            Console.WriteLine("Input ID of the item you want to delete: ");
+            int userChoice = GetUserInt();
             //Check that the ID they entered is actually an ID of an item viewed
-            //Get the index of the item they chose (it will always be the number they entered minus 1
-            //Send a call to the API to delete the API 
-            api.DeleteItem(userChoice);
+            if (DoesIDExist(userChoice, espressoViewed))
+            {
+                //Get the index of the item they chose
+                int indexChoice = (int)espressos[userChoice - 1].Id;
+                //Send a call to the API to delete the API
+                api.DeleteItem(indexChoice);
+            }
+        }
+        private bool DoesIDExist(int Id, List<EspressoToView> viewList)
+        {
+            bool idExists = false;
+            foreach (var item in viewList)
+            {
+                if (item.Id == Id) { idExists = true; break; }
+            }
+            return idExists;
+        }
+        private int GetUserInt()
+        {
+            int choice;
+            bool goodInput;
+            do
+            {
+                Console.WriteLine("Input a rating 1-10");
+                goodInput = int.TryParse(GetUserInputString(), out choice);
+            } while (!goodInput);
+            return choice;
         }
         private void Add()
         {
@@ -102,21 +127,21 @@ namespace EspressoItemsUserApp
         private int GetUserRating()
         {
             int rating;
-            bool goodInput;
             bool inRange;
             do
             {
-                Console.WriteLine("Input a rating 1-10");
-                goodInput = int.TryParse(GetUserInputString(), out rating);
+                rating = GetUserInt();
                 if (rating > 0 && rating <= 10)
                 {
                     inRange = true;
                 }
                 else
                 {
+                    Console.WriteLine("Rating must be greater than 0 and less than or equal to 10.");
+                    Console.WriteLine("Try again");
                     inRange = false;
                 }
-            } while (!goodInput && !inRange);
+            } while (!inRange);
             return rating;
         }
     }
