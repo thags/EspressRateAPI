@@ -50,6 +50,14 @@ namespace EspressoItemsUserApp
             string ApiUrl = $"{APIURL}EspressoItems/{Id}";
             client.DeleteAsync(new Uri(ApiUrl));
         }
+        public void UpdateItem(int Id, EspressoItem espressoUpdate)
+        {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            string ApiUrl = $"{APIURL}EspressoItems/{Id}";
+            client.PutAsJsonAsync(new Uri(ApiUrl), espressoUpdate);
+        }
     }
 }
 
