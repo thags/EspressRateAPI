@@ -14,61 +14,34 @@ namespace EspressRateAPI.Controllers
     [ApiController]
     public class EspressoItemsController : ControllerBase
     {
-        private readonly EspressoContext _context;
 
-        public EspressoItemsController(EspressoContext context)
+        private IEspressoRepository _repository;
+
+        public EspressoItemsController()
         {
-            _context = context;
+            _repository = new EspressoRepository(new EspressoContext());
         }
 
         // GET: api/EspressoItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EspressoItem>>> GetEspressoItems()
+        public IEnumerable<EspressoItem> GetEspressoItems()
         {
-            return await _context.EspressoItems.ToListAsync();
+            return _repository.GetAll();
         }
 
         // GET: api/EspressoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EspressoItem>> GetEspressoItem(long id)
+        public EspressoItem GetEspressoItem(int id)
         {
-            var espressoItem = await _context.EspressoItems.FindAsync(id);
-
-            if (espressoItem == null)
-            {
-                return NotFound();
-            }
-
-            return espressoItem;
+            return _repository.Get(id);
         }
 
         // PUT: api/EspressoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEspressoItem(long id, EspressoItem espressoItem)
+        public async Task<IActionResult> PutEspressoItem(EspressoItem espressoItem)
         {
-            if (id != espressoItem.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(espressoItem).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EspressoItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _repository.Update(espressoItem);
 
             return NoContent();
         }
@@ -78,31 +51,16 @@ namespace EspressRateAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<EspressoItem>> PostEspressoItem(EspressoItem espressoItem)
         {
-            _context.EspressoItems.Add(espressoItem);
-            await _context.SaveChangesAsync();
+            _repository.Add(espressoItem);
 
             return CreatedAtAction(nameof(GetEspressoItem), new { id = espressoItem.Id }, espressoItem);
         }
 
         // DELETE: api/EspressoItems/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEspressoItem(long id)
+        public void DeleteEspressoItem(int id)
         {
-            var espressoItem = await _context.EspressoItems.FindAsync(id);
-            if (espressoItem == null)
-            {
-                return NotFound();
-            }
-
-            _context.EspressoItems.Remove(espressoItem);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool EspressoItemExists(long id)
-        {
-            return _context.EspressoItems.Any(e => e.Id == id);
+            _repository.Remove(id);
         }
     }
 }
