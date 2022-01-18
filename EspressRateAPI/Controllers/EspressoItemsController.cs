@@ -17,9 +17,9 @@ namespace EspressRateAPI.Controllers
 
         private IEspressoRepository _repository;
 
-        public EspressoItemsController()
+        public EspressoItemsController(IEspressoRepository repository)
         {
-            _repository = new EspressoRepository(new EspressoContext());
+            _repository = repository;
         }
 
         // GET: api/EspressoItems
