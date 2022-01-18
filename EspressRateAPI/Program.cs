@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IEspressoRepository, EspressoRepository>();
 builder.Services.AddDbContext<EspressoContext>(opt =>
         opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Initial Catalog=EspressoRate; Integrated Security=true;")
         );
